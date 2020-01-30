@@ -10,20 +10,21 @@ import UIKit
 
 final class CountriesListViewController: UIViewController, Alertable, StoryboardInstantiable {
     
-    @IBOutlet weak var countriesListContainer: UIView!
+    @IBOutlet weak var tableView: UITableView!
+    
     @IBOutlet weak var emptyDataLabel: UILabel!
     @IBOutlet weak var loadingView: UIActivityIndicatorView!
     @IBOutlet weak var searchBarContainer: UIView!
     
     var viewModel: CountriesListViewModel!
-    var countriesTableViewController: CountriesListTableViewController?
+    //var countriesTableViewController: CountriesListTableViewController?
     private var searchController = UISearchController(searchResultsController: nil)
     
-        static func create(with viewModel: CountriesListViewModel) -> CountriesListViewController {
-            let view = CountriesListViewController.instantiateViewController()
-            view.viewModel = viewModel
-            return view
-        }
+//    static func create(with viewModel: CountriesListViewModel) -> CountriesListViewController {
+//        let view = CountriesListViewController.instantiateViewController()
+//        view.viewModel = viewModel
+//        return view
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,16 +37,16 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
         viewModel.viewDidLoad()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == String(describing: CountriesListTableViewController.self),
-            let destinationVC = segue.destination as? CountriesListTableViewController {
-            countriesTableViewController = destinationVC
-            countriesTableViewController?.viewModel = viewModel
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == String(describing: CountriesListTableViewController.self),
+//            let destinationVC = segue.destination as? CountriesListTableViewController {
+//            countriesTableViewController = destinationVC
+//            countriesTableViewController?.viewModel = viewModel
+//        }
+//    }
     
     private func bind(to viewModel: CountriesListViewModel) {
-        viewModel.items.observe(on: self) { [weak self] in self?.countriesTableViewController?.items = $0 }
+        viewModel.items.observe(on: self) { [weak self] _ in self?.reload() }
         viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
         viewModel.loadingType.observe(on: self) { [weak self] _ in self?.updateViewsVisibility() }
     }
@@ -58,13 +59,12 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
     private func updateViewsVisibility() {
         loadingView.isHidden = true
         emptyDataLabel.isHidden = true
-        countriesListContainer.isHidden = true
         
         switch viewModel.loadingType.value {
         case .none: updateCountriesListVisibility()
         case .fullScreen: loadingView.isHidden = false
         }
-       // updateQueriesSuggestionsVisibility()
+        // updateQueriesSuggestionsVisibility()
     }
     
     private func updateCountriesListVisibility() {
@@ -72,17 +72,46 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
             emptyDataLabel.isHidden = false
             return
         }
-        countriesListContainer.isHidden = false
     }
     
-//    private func updateQueriesSuggestionsVisibility() {
-//        guard searchController.searchBar.isFirstResponder else {
-//            viewModel.closeQueriesSuggestions()
-//            return
-//        }
-//        viewModel.showQueriesSuggestions()
-//    }
+    func reload() {
+        tableView.reloadData()
+    }
+    
+    //    private func updateQueriesSuggestionsVisibility() {
+    //        guard searchController.searchBar.isFirstResponder else {
+    //            viewModel.closeQueriesSuggestions()
+    //            return
+    //        }
+    //        viewModel.showQueriesSuggestions()
+    //    }
 }
+
+extension CountriesListViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel?.items.value.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CountriesListItemCell.reuseIdentifier, for: indexPath) as? CountriesListItemCell else {
+            fatalError("Cannot dequeue reusable cell \(CountriesListItemCell.self) with reuseIdentifier: \(CountriesListItemCell.reuseIdentifier)")
+        }
+        
+        cell.configure(with: (viewModel?.items.value[indexPath.row])!)
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel?.didSelect(item: viewModel.items.value[indexPath.row])
+    }
+}
+
 
 extension CountriesListViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

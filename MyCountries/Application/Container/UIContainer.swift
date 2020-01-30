@@ -32,11 +32,6 @@ extension DependencyContainer {
             let controller = UIStoryboard.countries.instantiateViewController() as CountriesListViewController
             controller.viewModel = viewModel
             
-//            let tableView = CountriesListTableViewController()
-//            tableView.viewModel = viewModel
-//            tableView.items = viewModel.items.value
-//            
-//            controller.countriesTableViewController = tableView
             return controller
         }
         
