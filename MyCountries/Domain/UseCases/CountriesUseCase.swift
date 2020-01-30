@@ -28,4 +28,8 @@ extension DefaultCountriesUseCase: CountriesUseCase {
         client.data(APIEndpoints.counties())
             .map { try JSONDecoder().decode(Countries.self, from: $0) }
     }
+    
+//    func country(by name: String) -> Single<Country.Details> {
+//        
+//    }
 }

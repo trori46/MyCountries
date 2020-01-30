@@ -14,5 +14,17 @@ struct Country: Decodable {
     let name: String
     let capital: String
     let region: String
-    let population: Double
+}
+
+extension Country {
+    
+    struct Details {
+        let name: String
+        let capital: String
+        let region: String
+        let subregion: String
+        let population: Double
+        let area: String
+        let currencies: [Double: String]
+    }
 }
