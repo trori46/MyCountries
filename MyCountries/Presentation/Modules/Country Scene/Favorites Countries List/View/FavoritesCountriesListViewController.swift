@@ -23,6 +23,7 @@ final class FavoritesCountriesListViewController: UIViewController, Alertable, S
         emptyDataLabel.text = NSLocalizedString("Search results", comment: "")
                 
         tabBarItem.image = UIImage(named: "Favorites")
+        
         bind(to: viewModel)
     }
     

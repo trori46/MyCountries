@@ -24,7 +24,7 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
         title = NSLocalizedString("Countries", comment: "")
         emptyDataLabel.text = NSLocalizedString("Search results", comment: "")
         tabBarItem.title = NSLocalizedString("Countries", comment: "")
-        tabBarItem.image = UIImage(named: "star")
+        tabBarItem.image = UIImage(named: "Favorites")
         
         setupSearchController()
         

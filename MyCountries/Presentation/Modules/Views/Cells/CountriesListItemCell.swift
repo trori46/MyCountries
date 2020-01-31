@@ -27,7 +27,7 @@ final class CountriesListItemCell: UITableViewCell {
         capitalLabel.text = viewModel.capital
         regionLabel.text = viewModel.region
         isFavorite = viewModel.isFavorite
-        favoritesButton.setImage(UIImage(named: "star"), for: .normal)
+        favoritesButton.setImage(UIImage(named: "Favorites"), for: .normal)
     }
     
     @IBAction func favorite(_ sender: Any) {
