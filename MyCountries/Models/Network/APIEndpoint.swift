@@ -10,7 +10,11 @@ import Foundation
 
 struct APIEndpoints {
     
-    static func counties() -> Endpoint {
-        return Endpoint(path: "/all")
+    static func counties() -> HTTPRequest {
+        return HTTPRequest(path: "/all")
+    }
+    
+    static func county(by name: String) -> HTTPRequest {
+        return HTTPRequest(path: "/name/\(name)")
     }
 }

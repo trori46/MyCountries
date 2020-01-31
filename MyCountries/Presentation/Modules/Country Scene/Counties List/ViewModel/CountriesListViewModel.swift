@@ -10,6 +10,12 @@ import Foundation
 import RxSwift
 import UIKit
 
+
+enum CountriesListViewModelRoute {
+    case initial
+    case showCountryDetail(name: String)
+}
+
 enum CountriesListViewModelLoading {
     case none
     case fullScreen
@@ -17,6 +23,7 @@ enum CountriesListViewModelLoading {
 }
 
 protocol CountriesListViewModelOutput {
+    var route: Observable<CountriesListViewModelRoute> { get }
     var items: Observable<[CountriesListItemViewModel]> { get }
     var loadingType: Observable<CountriesListViewModelLoading> { get }
     var error: Observable<String> { get }
@@ -35,22 +42,8 @@ protocol CountriesListViewModelInput {
 protocol CountriesListViewModel: CountriesListViewModelOutput, CountriesListViewModelInput {}
 
 final class DefaultCountriesListViewModel: CountriesListViewModel {
-    func viewDidLoad() {
-        loadingType.value = .fullScreen
-        _ = countriesUseCase.countries()
-            .observeOn(MainScheduler.instance)
-            .map { $0.map(DefaultCountriesListItemViewModel.init) }
-            .do(onSuccess: { [weak self] (a) in
-                print(a)
-                self?.items.value = a
-                self?.loadingType.value = .none
-                
-                }, onError: { [weak self] _ in
-                    self?.error.value = "sfdfs"
-            })
-            .subscribe()
-    }
     
+    let route: Observable<CountriesListViewModelRoute> = Observable(.initial)
     var items: Observable<[CountriesListItemViewModel]> = Observable([])
     let loadingType: Observable<CountriesListViewModelLoading> = Observable(.none)
     var isEmpty: Bool { return items.value.isEmpty }
@@ -60,6 +53,27 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
     
     init(countriesUseCase: CountriesUseCase) {
         self.countriesUseCase = countriesUseCase
+    }
+    
+    func viewDidLoad() {
+       updateDate()
+    }
+    
+    func updateDate() {
+        loadingType.value = .fullScreen
+               _ = countriesUseCase.countries()
+                   .observeOn(MainScheduler.instance)
+                   .map { $0.map(DefaultCountriesListItemViewModel.init) }
+                   .do(onSuccess: { [weak self] (a) in
+                       print(a)
+                       self?.items.value = a
+                       self?.loadingType.value = .none
+                       
+                       }, onError: { [weak self] in
+                           self?.loadingType.value = .none
+                           self?.error.value = $0.localizedDescription
+                   })
+                   .subscribe()
     }
     
     func didSearch(query: String) {
@@ -79,6 +93,6 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
     }
     
     func didSelect(item: CountriesListItemViewModel) {
-        
+        route.value = .showCountryDetail(name: item.name)
     }
 }

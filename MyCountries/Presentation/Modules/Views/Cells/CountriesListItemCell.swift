@@ -12,6 +12,7 @@ final class CountriesListItemCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var capitalLabel: UILabel!
     @IBOutlet weak var regionLabel: UILabel!
+    @IBOutlet weak var favoritesButton: UIButton!
     
     static let reuseIdentifier = String(describing: CountriesListItemCell.self)
     static let height = CGFloat(130)

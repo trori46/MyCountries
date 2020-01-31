@@ -1,5 +1,5 @@
 //
-//  Endpoint.swift
+//  HTTPRequest.swift
 //  MyCountries
 //
 //  Created by Viktoria Rohozhyna on 30.01.2020.
@@ -8,7 +8,7 @@
 
 import Alamofire
 
-struct Endpoint {
+struct HTTPRequest {
     
     public var path: String
     public var method: HTTPMethod

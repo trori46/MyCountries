@@ -20,7 +20,6 @@ extension DependencyContainer: CoreContainer {
     }
 }
 
-
 extension DependencyContainer {
     
     static func core() -> DependencyContainer {

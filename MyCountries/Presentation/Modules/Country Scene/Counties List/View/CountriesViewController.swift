@@ -17,14 +17,7 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
     @IBOutlet weak var searchBarContainer: UIView!
     
     var viewModel: CountriesListViewModel!
-    //var countriesTableViewController: CountriesListTableViewController?
     private var searchController = UISearchController(searchResultsController: nil)
-    
-//    static func create(with viewModel: CountriesListViewModel) -> CountriesListViewController {
-//        let view = CountriesListViewController.instantiateViewController()
-//        view.viewModel = viewModel
-//        return view
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,18 +30,11 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
         viewModel.viewDidLoad()
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == String(describing: CountriesListTableViewController.self),
-//            let destinationVC = segue.destination as? CountriesListTableViewController {
-//            countriesTableViewController = destinationVC
-//            countriesTableViewController?.viewModel = viewModel
-//        }
-//    }
-    
     private func bind(to viewModel: CountriesListViewModel) {
         viewModel.items.observe(on: self) { [weak self] _ in self?.reload() }
         viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
         viewModel.loadingType.observe(on: self) { [weak self] _ in self?.updateViewsVisibility() }
+        viewModel.route.observe(on: self) { [weak self] in self?.handle($0) }
     }
     
     func showError(_ error: String) {
@@ -77,14 +63,6 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
     func reload() {
         tableView.reloadData()
     }
-    
-    //    private func updateQueriesSuggestionsVisibility() {
-    //        guard searchController.searchBar.isFirstResponder else {
-    //            viewModel.closeQueriesSuggestions()
-    //            return
-    //        }
-    //        viewModel.showQueriesSuggestions()
-    //    }
 }
 
 extension CountriesListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -108,10 +86,21 @@ extension CountriesListViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         viewModel?.didSelect(item: viewModel.items.value[indexPath.row])
     }
 }
 
+extension CountriesListViewController {
+    func handle(_ route: CountriesListViewModelRoute) {
+        switch route {
+        case .initial: break
+        case .showCountryDetail(let name):
+            let controller = assembly.ui.country(by: name)
+            navigationController?.pushViewController(controller, animated: true)
+        }
+    }
+}
 
 extension CountriesListViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -146,7 +135,7 @@ extension CountriesListViewController {
     private func setupSearchController() {
         searchController.delegate = self
         searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = NSLocalizedString("Search Movies", comment: "")
+        searchController.searchBar.placeholder = NSLocalizedString("Search Country", comment: "")
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.translatesAutoresizingMaskIntoConstraints = true
         searchController.searchBar.barStyle = .black

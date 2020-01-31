@@ -16,5 +16,5 @@ typealias ParameterEncoding = Alamofire.ParameterEncoding
 
 protocol APIClient {
     
-    func data(_ endpoint: Endpoint) -> Single<Data>
+    func data(_ endpoint: HTTPRequest) -> Single<Data>
 }

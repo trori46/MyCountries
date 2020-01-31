@@ -12,6 +12,7 @@ import Dip
 protocol UIContainer {
 
     func countries() -> UIViewController
+    func country(by: String) -> UIViewController
 
 }
 
@@ -19,6 +20,10 @@ extension DependencyContainer: UIContainer {
     
     func countries() -> UIViewController {
         return try! resolve() as CountriesListViewController
+    }
+    
+    func country(by name: String) -> UIViewController {
+        return try! resolve(arguments: name) as CountryDetailsViewController
     }
 }
 
@@ -35,15 +40,22 @@ extension DependencyContainer {
             return controller
         }
         
+        container.register { (name: String) -> CountryDetailsViewController in
+            let viewModel = DefaultCountryDetailsViewModel(name: name, countriesUseCase: try container.resolve())
+                   let controller = UIStoryboard.countryDetails.instantiateViewController() as CountryDetailsViewController
+                   controller.viewModel = viewModel
+                   
+                   return controller
+               }
+        
         return container
     }
 }
 
 extension UIStoryboard {
     
-    static let main = UIStoryboard(name: "Main", bundle: nil)
-    static let countries = UIStoryboard(name: "Countries", bundle: nil)
-
+    static let countries = UIStoryboard(name: "CountriesList", bundle: nil)
+    static let countryDetails = UIStoryboard(name: "CountryDetails", bundle: nil)
 }
 
 extension UIStoryboard {

@@ -11,7 +11,8 @@ import Alamofire
 
 protocol CountriesUseCase {
     
-   func countries() -> Single<Countries>
+    func countries() -> Single<Countries>
+    func country(by name: String) -> Single<Country.Details>
 }
 
 final class DefaultCountriesUseCase {
@@ -24,12 +25,17 @@ final class DefaultCountriesUseCase {
 }
 
 extension DefaultCountriesUseCase: CountriesUseCase {
+    
     func countries() -> Single<Countries> {
         client.data(APIEndpoints.counties())
             .map { try JSONDecoder().decode(Countries.self, from: $0) }
     }
     
-//    func country(by name: String) -> Single<Country.Details> {
-//        
-//    }
+    func country(by name: String) -> Single<Country.Details> {
+        client.data(APIEndpoints.county(by: name))
+            .map { try JSONDecoder().decode([Country.Details].self, from: $0) }
+            .map {
+                print($0)
+                return $0.first! }
+    }
 }

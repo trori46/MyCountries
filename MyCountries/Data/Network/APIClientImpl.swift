@@ -34,13 +34,14 @@ final class APIClientImpl {
 
 extension APIClientImpl: APIClient {
     
-    func data(_ endpoint: Endpoint) -> Single<Data> {
+    func data(_ endpoint: HTTPRequest) -> Single<Data> {
         let request = manager.request(
             baseURL.appendingPathComponent(endpoint.path),
             method: endpoint.method,
             parameters: endpoint.parameters,
             encoding: endpoint.encoding,
             headers: headers)
+        print(request.debugDescription)
         return response(from: request)
     }
     
