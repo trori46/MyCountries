@@ -15,7 +15,6 @@ final class CountriesListItemCell: UITableViewCell {
     @IBOutlet weak var favoritesButton: UIButton!
     
     static let reuseIdentifier = String(describing: CountriesListItemCell.self)
-    static let height = CGFloat(130)
     var isFavorite: Bool = false {
         didSet {
             favoritesButton.tintColor = isFavorite ? .yellow : .gray
@@ -27,7 +26,7 @@ final class CountriesListItemCell: UITableViewCell {
         capitalLabel.text = viewModel.capital
         regionLabel.text = viewModel.region
         isFavorite = viewModel.isFavorite
-        favoritesButton.setImage(UIImage(named: "Favorites"), for: .normal)
+        favoritesButton.setImage(UIImage(named: "star"), for: .normal)
     }
     
     @IBAction func favorite(_ sender: Any) {
@@ -46,7 +45,7 @@ final class CountriesListItemCell: UITableViewCell {
         
         UserDefaults.standard.set(array, forKey: "favorites")
         
-        
+    
     }
     
     enum State {

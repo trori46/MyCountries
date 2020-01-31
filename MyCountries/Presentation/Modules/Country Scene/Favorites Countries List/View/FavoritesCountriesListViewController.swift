@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class FavoritesCountriesListViewController: UIViewController, Alertable, StoryboardInstantiable {
+final class FavoritesCountriesListViewController: UIViewController, Alertable {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -19,10 +19,8 @@ final class FavoritesCountriesListViewController: UIViewController, Alertable, S
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("Favorites", comment: "")
         emptyDataLabel.text = NSLocalizedString("Search results", comment: "")
-                
-        tabBarItem.image = UIImage(named: "Favorites")
+        tableView.tableFooterView = .init(frame: .zero)
         
         bind(to: viewModel)
     }
@@ -52,7 +50,6 @@ final class FavoritesCountriesListViewController: UIViewController, Alertable, S
         case .none: updateCountriesListVisibility()
         case .fullScreen: loadingView.isHidden = false
         }
-        // updateQueriesSuggestionsVisibility()
     }
     
     private func updateCountriesListVisibility() {

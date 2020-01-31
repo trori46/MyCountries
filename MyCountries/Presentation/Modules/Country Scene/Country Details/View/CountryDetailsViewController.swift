@@ -21,7 +21,6 @@ final class CountryDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString(viewModel.name, comment: "")
         
         bind(to: viewModel)
         viewModel.viewDidLoad()
@@ -37,9 +36,8 @@ final class CountryDetailsViewController: UIViewController {
         capitalLabel.text = item.capital
         regionLabel.text = item.region
         subregionLabel.text = item.subregion
-        populationLabel.text = "\(item.population)"
+        populationLabel.text = item.population
         areaLabel.text = item.area
         currenciesLabel.text = item.currencies
-        
     }
 }

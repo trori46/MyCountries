@@ -68,7 +68,6 @@ final class DefaultFavoritesCountriesListViewModel: FavoritesCountriesListViewMo
             
             array.first(where: { $0.name == name })?.selectFavorite()
             items.value = array.filter { $0.isFavorite  }
-            
         }
     }
     

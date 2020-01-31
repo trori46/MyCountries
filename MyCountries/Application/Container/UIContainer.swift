@@ -10,11 +10,10 @@ import UIKit
 import Dip
 
 protocol UIContainer {
-
+    
     func root() -> UIViewController
     func countries() -> UIViewController
     func country(by: String) -> UIViewController
-
 }
 
 extension DependencyContainer: UIContainer {
@@ -48,7 +47,6 @@ extension DependencyContainer {
             controller.viewControllers = controllers.map {
                 let controller = UINavigationController(rootViewController: $0)
                 controller.tabBarItem.title = $0.tabBarItem.title
-                controller.tabBarItem.image = UIImage(named: "\($0.tabBarItem.title)")
                 return controller
             }
             
@@ -61,6 +59,10 @@ extension DependencyContainer {
             let viewModel = DefaultCountriesListViewModel(countriesUseCase: try container.resolve())
             let controller = UIStoryboard.countries.instantiateViewController() as CountriesListViewController
             controller.viewModel = viewModel
+            controller.title = NSLocalizedString("Countries", comment: "")
+            
+            controller.tabBarItem.title = controller.navigationItem.title
+            controller.tabBarItem.image = #imageLiteral(resourceName: "Countries")
             
             return controller
         }
@@ -69,17 +71,22 @@ extension DependencyContainer {
             let viewModel = DefaultFavoritesCountriesListViewModel(countriesUseCase: try container.resolve())
             let controller = UIStoryboard.countries.instantiateViewController() as FavoritesCountriesListViewController
             controller.viewModel = viewModel
+            controller.title = NSLocalizedString("Favorites", comment: "")
+            controller.tabBarItem.title = controller.navigationItem.title
+            controller.tabBarItem.image = #imageLiteral(resourceName: "Favorites")
             
             return controller
         }
         
         container.register { (name: String) -> CountryDetailsViewController in
             let viewModel = DefaultCountryDetailsViewModel(name: name, countriesUseCase: try container.resolve())
-                   let controller = UIStoryboard.countryDetails.instantiateViewController() as CountryDetailsViewController
-                   controller.viewModel = viewModel
-                   
-                   return controller
-               }
+            let controller = UIStoryboard.countryDetails.instantiateViewController() as CountryDetailsViewController
+            controller.title = NSLocalizedString("Details", comment: "")
+            
+            controller.viewModel = viewModel
+            
+            return controller
+        }
         
         return container
     }

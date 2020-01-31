@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CountriesListViewController: UIViewController, Alertable, StoryboardInstantiable {
+final class CountriesListViewController: UIViewController, Alertable {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -21,10 +21,8 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("Countries", comment: "")
         emptyDataLabel.text = NSLocalizedString("Search results", comment: "")
-        tabBarItem.title = NSLocalizedString("Countries", comment: "")
-        tabBarItem.image = UIImage(named: "Favorites")
+        tableView.tableFooterView = .init(frame: .zero)
         
         setupSearchController()
         
@@ -34,12 +32,12 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
     
     private func bind(to viewModel: CountriesListViewModel) {
         viewModel.items.observe(on: self) { [weak self] _ in self?.reload() }
-        viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
+        viewModel.error.observe(on: self) { [weak self] in self?.configure($0) }
         viewModel.loadingType.observe(on: self) { [weak self] _ in self?.updateViewsVisibility() }
         viewModel.route.observe(on: self) { [weak self] in self?.handle($0) }
     }
     
-    func showError(_ error: String) {
+    func configure(_ error: String) {
         guard !error.isEmpty else { return }
         showAlert(title: NSLocalizedString("Error", comment: ""), message: error)
     }
@@ -52,7 +50,6 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
         case .none: updateCountriesListVisibility()
         case .fullScreen: loadingView.isHidden = false
         }
-        // updateQueriesSuggestionsVisibility()
     }
     
     private func updateCountriesListVisibility() {
@@ -108,14 +105,12 @@ extension CountriesListViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-        //countriesTableViewController?.tableView.setContentOffset(CGPoint.zero, animated: false)
         viewModel.didSearch(query: searchText)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
         searchController.isActive = false
-        //countriesTableViewController?.tableView.setContentOffset(CGPoint.zero, animated: false)
         viewModel.didSearch(query: searchText)
     }
     
@@ -124,25 +119,10 @@ extension CountriesListViewController: UISearchBarDelegate {
     }
 }
 
-extension CountriesListViewController: UISearchControllerDelegate {
-    public func willPresentSearchController(_ searchController: UISearchController) {
-        //updateQueriesSuggestionsVisibility()
-    }
-    
-    public func willDismissSearchController(_ searchController: UISearchController) {
-        // updateQueriesSuggestionsVisibility()
-    }
-    
-    public func didDismissSearchController(_ searchController: UISearchController) {
-        //updateQueriesSuggestionsVisibility()
-    }
-}
-
 // MARK: - Setup Search Controller
 
 extension CountriesListViewController {
     private func setupSearchController() {
-        searchController.delegate = self
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = NSLocalizedString("Search Country", comment: "")
         searchController.obscuresBackgroundDuringPresentation = false

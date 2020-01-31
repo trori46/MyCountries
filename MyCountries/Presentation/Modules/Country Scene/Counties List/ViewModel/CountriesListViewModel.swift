@@ -19,7 +19,6 @@ enum CountriesListViewModelRoute {
 enum CountriesListViewModelLoading {
     case none
     case fullScreen
-    // case nextPage
 }
 
 protocol CountriesListViewModelOutput {
@@ -40,7 +39,6 @@ protocol CountriesListViewModelInput {
 protocol CountriesListViewModel: CountriesListViewModelOutput, CountriesListViewModelInput {}
 
 final class DefaultCountriesListViewModel: CountriesListViewModel {
-    
     
     let route: Observable<CountriesListViewModelRoute> = Observable(.initial)
     var items: Observable<[CountriesListItemViewModel]> = Observable([])
@@ -85,6 +83,7 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
     }
     
     func selectFavorites(favorites: [String]) {
+        
         let array = items.value
         array.forEach { $0.deselectFavorite() }
         

@@ -21,7 +21,6 @@ protocol CountryDetailsItemViewModelOutput {
 protocol CountryDetailsItemViewModel: CountryDetailsItemViewModelOutput {}
 
 final class DefaultCountryDetailsItemViewModel: CountryDetailsItemViewModel {
-    // MARK: - OUTPUT
     let name: String
     let capital: String
     let region: String
