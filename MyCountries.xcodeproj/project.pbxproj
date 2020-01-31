@@ -38,6 +38,8 @@
 		ADA527AB23E32A7400B64C0D /* CountryDetailsItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA527AA23E32A7400B64C0D /* CountryDetailsItemViewModel.swift */; };
 		ADA527AD23E32AF300B64C0D /* CountryDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA527AC23E32AF300B64C0D /* CountryDetailsViewModel.swift */; };
 		ADF0058123E418AB0003209B /* Country+Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF0058023E418AB0003209B /* Country+Details.swift */; };
+		ADF0058823E4378B0003209B /* FavoritesCountriesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF0058723E4378B0003209B /* FavoritesCountriesListViewController.swift */; };
+		ADF0058A23E438070003209B /* FavoritesCountriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF0058923E438070003209B /* FavoritesCountriesViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +77,8 @@
 		ADA527AA23E32A7400B64C0D /* CountryDetailsItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDetailsItemViewModel.swift; sourceTree = "<group>"; };
 		ADA527AC23E32AF300B64C0D /* CountryDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDetailsViewModel.swift; sourceTree = "<group>"; };
 		ADF0058023E418AB0003209B /* Country+Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Country+Details.swift"; sourceTree = "<group>"; };
+		ADF0058723E4378B0003209B /* FavoritesCountriesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCountriesListViewController.swift; sourceTree = "<group>"; };
+		ADF0058923E438070003209B /* FavoritesCountriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCountriesViewModel.swift; sourceTree = "<group>"; };
 		CE18A51E577A1F3D4CEEC60B /* Pods-MyCountries.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyCountries.debug.xcconfig"; path = "Target Support Files/Pods-MyCountries/Pods-MyCountries.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -205,6 +209,7 @@
 		ADA5276A23E2D4B800B64C0D /* Country Scene */ = {
 			isa = PBXGroup;
 			children = (
+				ADF0058423E437320003209B /* Favorites Countries List */,
 				ADA527A123E3250600B64C0D /* Country Details */,
 				ADA5276B23E2D4C300B64C0D /* Counties List */,
 			);
@@ -320,6 +325,31 @@
 				ADA527AC23E32AF300B64C0D /* CountryDetailsViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		ADF0058423E437320003209B /* Favorites Countries List */ = {
+			isa = PBXGroup;
+			children = (
+				ADF0058623E4376A0003209B /* View */,
+				ADF0058523E4375F0003209B /* ViewModel */,
+			);
+			path = "Favorites Countries List";
+			sourceTree = "<group>";
+		};
+		ADF0058523E4375F0003209B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				ADF0058923E438070003209B /* FavoritesCountriesViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		ADF0058623E4376A0003209B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				ADF0058723E4378B0003209B /* FavoritesCountriesListViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		CE945551CA5590752F513B49 /* Pods */ = {
@@ -459,6 +489,7 @@
 				ADF0058123E418AB0003209B /* Country+Details.swift in Sources */,
 				ADA5277323E2D85F00B64C0D /* APIClientImpl.swift in Sources */,
 				ADA5277523E2D90000B64C0D /* HTTPRequest.swift in Sources */,
+				ADF0058A23E438070003209B /* FavoritesCountriesViewModel.swift in Sources */,
 				ADA527AB23E32A7400B64C0D /* CountryDetailsItemViewModel.swift in Sources */,
 				ADA5279323E2F52B00B64C0D /* CoreContainer.swift in Sources */,
 				ADA5279523E2F54D00B64C0D /* UIContainer.swift in Sources */,
@@ -479,6 +510,7 @@
 				ADA5274923E2CE2800B64C0D /* SceneDelegate.swift in Sources */,
 				ADA5279D23E2FC5A00B64C0D /* CountriesListItemCell.swift in Sources */,
 				ADA5277B23E2DAC400B64C0D /* Country.swift in Sources */,
+				ADF0058823E4378B0003209B /* FavoritesCountriesListViewController.swift in Sources */,
 				ADA527A323E3252000B64C0D /* CountryDetailsViewController.swift in Sources */,
 				ADA5277123E2D6B700B64C0D /* APIClient.swift in Sources */,
 			);

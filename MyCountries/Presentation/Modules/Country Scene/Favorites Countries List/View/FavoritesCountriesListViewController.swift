@@ -1,23 +1,21 @@
 //
-//  CountriesListViewController.swift
+//  FavoritesCountriesListViewController.swift
 //  MyCountries
 //
-//  Created by Viktoria Rohozhyna on 30.01.2020.
+//  Created by Viktoria Rohozhyna on 31.01.2020.
 //  Copyright © 2020 Viktoria Rohozhyna. All rights reserved.
 //
 
 import UIKit
 
-final class CountriesListViewController: UIViewController, Alertable, StoryboardInstantiable {
+final class FavoritesCountriesListViewController: UIViewController, Alertable, StoryboardInstantiable {
     
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var emptyDataLabel: UILabel!
     @IBOutlet weak var loadingView: UIActivityIndicatorView!
-    @IBOutlet weak var searchBarContainer: UIView!
     
-    var viewModel: CountriesListViewModel!
-    private var searchController = UISearchController(searchResultsController: nil)
+    var viewModel: FavoritesCountriesListViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,14 +23,17 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
         emptyDataLabel.text = NSLocalizedString("Search results", comment: "")
         tabBarItem.title = NSLocalizedString("Countries", comment: "")
         tabBarItem.image = UIImage(named: "star")
-        
-        setupSearchController()
-        
+                
         bind(to: viewModel)
+        //viewModel.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewModel.viewDidLoad()
     }
     
-    private func bind(to viewModel: CountriesListViewModel) {
+    private func bind(to viewModel: FavoritesCountriesListViewModel) {
         viewModel.items.observe(on: self) { [weak self] _ in self?.reload() }
         viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
         viewModel.loadingType.observe(on: self) { [weak self] _ in self?.updateViewsVisibility() }
@@ -67,7 +68,7 @@ final class CountriesListViewController: UIViewController, Alertable, Storyboard
     }
 }
 
-extension CountriesListViewController: UITableViewDelegate, UITableViewDataSource {
+extension FavoritesCountriesListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -93,7 +94,7 @@ extension CountriesListViewController: UITableViewDelegate, UITableViewDataSourc
     }
 }
 
-extension CountriesListViewController {
+extension FavoritesCountriesListViewController {
     func handle(_ route: CountriesListViewModelRoute) {
         switch route {
         case .initial: break
@@ -101,50 +102,5 @@ extension CountriesListViewController {
             let controller = assembly.ui.country(by: name)
             navigationController?.pushViewController(controller, animated: true)
         }
-    }
-}
-
-extension CountriesListViewController: UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-        searchController.isActive = false
-        //countriesTableViewController?.tableView.setContentOffset(CGPoint.zero, animated: false)
-        //viewModel.didSearch(query: searchText)
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        //viewModel.didCancelSearch()
-    }
-}
-
-extension CountriesListViewController: UISearchControllerDelegate {
-    public func willPresentSearchController(_ searchController: UISearchController) {
-        //updateQueriesSuggestionsVisibility()
-    }
-    
-    public func willDismissSearchController(_ searchController: UISearchController) {
-        // updateQueriesSuggestionsVisibility()
-    }
-    
-    public func didDismissSearchController(_ searchController: UISearchController) {
-        //updateQueriesSuggestionsVisibility()
-    }
-}
-
-// MARK: - Setup Search Controller
-
-extension CountriesListViewController {
-    private func setupSearchController() {
-        searchController.delegate = self
-        searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = NSLocalizedString("Search Country", comment: "")
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.translatesAutoresizingMaskIntoConstraints = true
-        searchController.searchBar.barStyle = .black
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.frame = searchBarContainer.bounds
-        searchController.searchBar.autoresizingMask = [.flexibleWidth]
-        searchBarContainer.addSubview(searchController.searchBar)
-        definesPresentationContext = true
     }
 }

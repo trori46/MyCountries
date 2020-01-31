@@ -1,47 +1,22 @@
 //
-//  CountriesViewModel.swift
+//  FavoritesCountriesViewModel.swift
 //  MyCountries
 //
-//  Created by Viktoria Rohozhyna on 30.01.2020.
+//  Created by Viktoria Rohozhyna on 31.01.2020.
 //  Copyright © 2020 Viktoria Rohozhyna. All rights reserved.
 //
-
 import Foundation
 import RxSwift
 import UIKit
 
-
-enum CountriesListViewModelRoute {
-    case initial
-    case showCountryDetail(name: String)
-}
-
-enum CountriesListViewModelLoading {
-    case none
-    case fullScreen
-    // case nextPage
-}
-
-protocol CountriesListViewModelOutput {
-    var route: Observable<CountriesListViewModelRoute> { get }
-    var items: Observable<[CountriesListItemViewModel]> { get }
-    var loadingType: Observable<CountriesListViewModelLoading> { get }
-    var error: Observable<String> { get }
-    var isEmpty: Bool { get }
-}
-
-protocol CountriesListViewModelInput {
+protocol FavouritesCountriesListViewModelInput {
     func viewDidLoad()
-    func didSearch(query: String)
-    func didCancelSearch()
-    func showQueriesSuggestions()
-    func closeQueriesSuggestions()
     func didSelect(item: CountriesListItemViewModel)
 }
 
-protocol CountriesListViewModel: CountriesListViewModelOutput, CountriesListViewModelInput {}
+protocol FavoritesCountriesListViewModel: CountriesListViewModelOutput, FavouritesCountriesListViewModelInput {}
 
-final class DefaultCountriesListViewModel: CountriesListViewModel {
+final class DefaultFavoritesCountriesListViewModel: FavoritesCountriesListViewModel {
     
     let route: Observable<CountriesListViewModelRoute> = Observable(.initial)
     var items: Observable<[CountriesListItemViewModel]> = Observable([])
@@ -62,13 +37,15 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
     }
     
     func updateDate() {
+        let favorites = UserDefaults.standard.favorites
+        
         loadingType.value = .fullScreen
         _ = countriesUseCase.countries()
             .observeOn(MainScheduler.instance)
             .map { $0.map(DefaultCountriesListItemViewModel.init) }
             .do(onSuccess: { [weak self] (a) in
-                print(a)
                 self?.items.value = a
+                self?.selectFavorites(favorites: favorites ?? [])
                 self?.loadingType.value = .none
                 
                 }, onError: { [weak self] in
@@ -78,41 +55,21 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
             .subscribe()
         
         observer = UserDefaults.standard.observe(\.favorites!, options: [.initial, .new], changeHandler: { [weak self] (defaults, change) in
-            guard let array = self?.items.value else { return }
-            array.forEach { $0.deselectFavorite() }
-            
-            change.newValue?.forEach { (name) in
-                
-                array.first(where: { $0.name == name })?.selectFavorite()
-                self?.items.value = array
-            }
+            guard let favorites = change.newValue else { return }
+            self?.selectFavorites(favorites: favorites)
         })
     }
     
     func selectFavorites(favorites: [String]) {
-           let array = items.value
-           array.forEach { $0.deselectFavorite() }
-           
-           favorites.forEach { (name) in
-               
-               array.first(where: { $0.name == name })?.selectFavorite()
-               self.items.value = array
-           }
-       }
-    func didSearch(query: String) {
+        let array = items.value
+        array.forEach { $0.deselectFavorite() }
         
-    }
-    
-    func didCancelSearch() {
-        
-    }
-    
-    func showQueriesSuggestions() {
-        
-    }
-    
-    func closeQueriesSuggestions() {
-        
+        favorites.forEach { (name) in
+            
+            array.first(where: { $0.name == name })?.selectFavorite()
+            items.value = array.filter { $0.isFavorite  }
+            
+        }
     }
     
     func didSelect(item: CountriesListItemViewModel) {

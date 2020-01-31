@@ -11,12 +11,17 @@ import Dip
 
 protocol UIContainer {
 
+    func root() -> UIViewController
     func countries() -> UIViewController
     func country(by: String) -> UIViewController
 
 }
 
 extension DependencyContainer: UIContainer {
+    
+    func root() -> UIViewController {
+        return try! resolve() as UITabBarController
+    }
     
     func countries() -> UIViewController {
         return try! resolve() as CountriesListViewController
@@ -32,9 +37,36 @@ extension DependencyContainer {
     static func ui() -> DependencyContainer {
         let container = DependencyContainer()
         
+        container.register { () -> UITabBarController in
+            let controller = UITabBarController()
+            
+            let controllers = [
+                try container.resolve() as CountriesListViewController,
+                try container.resolve() as FavoritesCountriesListViewController
+            ]
+            
+            controller.viewControllers = controllers.map {
+                let controller = UINavigationController(rootViewController: $0)
+                controller.tabBarItem.title = $0.tabBarItem.title
+                return controller
+            }
+            
+            controller.selectedIndex = 0
+            
+            return controller
+        }
+        
         container.register { () -> CountriesListViewController in
             let viewModel = DefaultCountriesListViewModel(countriesUseCase: try container.resolve())
             let controller = UIStoryboard.countries.instantiateViewController() as CountriesListViewController
+            controller.viewModel = viewModel
+            
+            return controller
+        }
+        
+        container.register { () -> FavoritesCountriesListViewController in
+            let viewModel = DefaultFavoritesCountriesListViewModel(countriesUseCase: try container.resolve())
+            let controller = UIStoryboard.countries.instantiateViewController() as FavoritesCountriesListViewController
             controller.viewModel = viewModel
             
             return controller
