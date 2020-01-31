@@ -10,7 +10,7 @@
         <!--Country Details View Controller-->
         <scene sceneID="oeD-rO-aDX">
             <objects>
-                <viewController storyboardIdentifier="CountryDetailsViewController" id="pWa-BQ-BHa" customClass="CountryDetailsViewController" customModule="MyCountries" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CountryDetailsViewController" hidesBottomBarWhenPushed="YES" id="pWa-BQ-BHa" customClass="CountryDetailsViewController" customModule="MyCountries" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pW2-Uq-zvU">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

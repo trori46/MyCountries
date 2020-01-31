@@ -34,14 +34,13 @@ protocol CountriesListViewModelInput {
     func viewDidLoad()
     func didSearch(query: String)
     func didCancelSearch()
-    func showQueriesSuggestions()
-    func closeQueriesSuggestions()
     func didSelect(item: CountriesListItemViewModel)
 }
 
 protocol CountriesListViewModel: CountriesListViewModelOutput, CountriesListViewModelInput {}
 
 final class DefaultCountriesListViewModel: CountriesListViewModel {
+    
     
     let route: Observable<CountriesListViewModelRoute> = Observable(.initial)
     var items: Observable<[CountriesListItemViewModel]> = Observable([])
@@ -58,10 +57,10 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
     }
     
     func viewDidLoad() {
-        updateDate()
+        updateData()
     }
     
-    func updateDate() {
+    func updateData() {
         loadingType.value = .fullScreen
         _ = countriesUseCase.countries()
             .observeOn(MainScheduler.instance)
@@ -90,29 +89,25 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
     }
     
     func selectFavorites(favorites: [String]) {
-           let array = items.value
-           array.forEach { $0.deselectFavorite() }
-           
-           favorites.forEach { (name) in
-               
-               array.first(where: { $0.name == name })?.selectFavorite()
-               self.items.value = array
-           }
-       }
-    func didSearch(query: String) {
+        let array = items.value
+        array.forEach { $0.deselectFavorite() }
         
+        favorites.forEach { (name) in
+            
+            array.first(where: { $0.name == name })?.selectFavorite()
+            self.items.value = array
+        }
+    }
+    
+    func didSearch(query: String) {
+        items.value = query.isEmpty ? items.value : items.value.filter {(item: CountriesListItemViewModel) -> Bool in
+            // If dataItem matches the searchText, return true to include it
+            return item.name.range(of: query, options: .caseInsensitive) != nil
+        }
     }
     
     func didCancelSearch() {
-        
-    }
-    
-    func showQueriesSuggestions() {
-        
-    }
-    
-    func closeQueriesSuggestions() {
-        
+        updateData()
     }
     
     func didSelect(item: CountriesListItemViewModel) {

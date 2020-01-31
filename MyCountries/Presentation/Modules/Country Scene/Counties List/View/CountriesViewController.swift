@@ -105,15 +105,22 @@ extension CountriesListViewController {
 }
 
 extension CountriesListViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        //countriesTableViewController?.tableView.setContentOffset(CGPoint.zero, animated: false)
+        viewModel.didSearch(query: searchText)
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
         searchController.isActive = false
         //countriesTableViewController?.tableView.setContentOffset(CGPoint.zero, animated: false)
-        //viewModel.didSearch(query: searchText)
+        viewModel.didSearch(query: searchText)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        //viewModel.didCancelSearch()
+        viewModel.didCancelSearch()
     }
 }
 
@@ -140,7 +147,6 @@ extension CountriesListViewController {
         searchController.searchBar.placeholder = NSLocalizedString("Search Country", comment: "")
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.translatesAutoresizingMaskIntoConstraints = true
-        searchController.searchBar.barStyle = .black
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.frame = searchBarContainer.bounds
         searchController.searchBar.autoresizingMask = [.flexibleWidth]

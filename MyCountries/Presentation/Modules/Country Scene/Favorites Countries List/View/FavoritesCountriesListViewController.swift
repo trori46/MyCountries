@@ -19,11 +19,10 @@ final class FavoritesCountriesListViewController: UIViewController, Alertable, S
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("Countries", comment: "")
+        title = NSLocalizedString("Favorites", comment: "")
         emptyDataLabel.text = NSLocalizedString("Search results", comment: "")
-        tabBarItem.title = NSLocalizedString("Countries", comment: "")
-        tabBarItem.image = UIImage(named: "star")
                 
+        tabBarItem.image = UIImage(named: "star")
         bind(to: viewModel)
         //viewModel.viewDidLoad()
     }
