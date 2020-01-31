@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CountryDetailsViewController: UIViewController {
+final class CountryDetailsViewController: UIViewController, Alertable {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var capitalLabel: UILabel!
     @IBOutlet weak var regionLabel: UILabel!
@@ -28,6 +28,7 @@ final class CountryDetailsViewController: UIViewController {
     
     private func bind(to viewModel: CountryDetailsViewModel) {
         viewModel.item.observe(on: self) { [weak self] in self?.reload(with: $0) }
+        viewModel.error.observe(on: self) { [weak self] in self?.configure($0) }
     }
     
     func reload(with viewModel: CountryDetailsItemViewModel?) {
@@ -40,4 +41,9 @@ final class CountryDetailsViewController: UIViewController {
         areaLabel.text = item.area
         currenciesLabel.text = item.currencies
     }
+    
+    func configure(_ error: String) {
+         guard !error.isEmpty else { return }
+         showAlert(title: NSLocalizedString("Error", comment: ""), message: error)
+     }
 }

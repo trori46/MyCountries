@@ -32,12 +32,12 @@ final class FavoritesCountriesListViewController: UIViewController, Alertable {
     
     private func bind(to viewModel: FavoritesCountriesListViewModel) {
         viewModel.items.observe(on: self) { [weak self] _ in self?.reload() }
-        viewModel.error.observe(on: self) { [weak self] in self?.showError($0) }
+        viewModel.error.observe(on: self) { [weak self] in self?.configure($0) }
         viewModel.loadingType.observe(on: self) { [weak self] _ in self?.updateViewsVisibility() }
         viewModel.route.observe(on: self) { [weak self] in self?.handle($0) }
     }
     
-    func showError(_ error: String) {
+    func configure(_ error: String) {
         guard !error.isEmpty else { return }
         showAlert(title: NSLocalizedString("Error", comment: ""), message: error)
     }
