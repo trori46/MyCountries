@@ -22,9 +22,8 @@ final class FavoritesCountriesListViewController: UIViewController, Alertable, S
         title = NSLocalizedString("Favorites", comment: "")
         emptyDataLabel.text = NSLocalizedString("Search results", comment: "")
                 
-        tabBarItem.image = UIImage(named: "star")
+        tabBarItem.image = UIImage(named: "Favorites")
         bind(to: viewModel)
-        //viewModel.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {

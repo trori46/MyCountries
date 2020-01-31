@@ -61,13 +61,15 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
     }
     
     func updateData() {
+        let favorites = UserDefaults.standard.favorites
+        
         loadingType.value = .fullScreen
         _ = countriesUseCase.countries()
             .observeOn(MainScheduler.instance)
             .map { $0.map(DefaultCountriesListItemViewModel.init) }
             .do(onSuccess: { [weak self] (a) in
-                print(a)
                 self?.items.value = a
+                self?.selectFavorites(favorites: favorites ?? [])
                 self?.loadingType.value = .none
                 
                 }, onError: { [weak self] in
@@ -77,14 +79,8 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
             .subscribe()
         
         observer = UserDefaults.standard.observe(\.favorites!, options: [.initial, .new], changeHandler: { [weak self] (defaults, change) in
-            guard let array = self?.items.value else { return }
-            array.forEach { $0.deselectFavorite() }
-            
-            change.newValue?.forEach { (name) in
-                
-                array.first(where: { $0.name == name })?.selectFavorite()
-                self?.items.value = array
-            }
+            guard let favorites = change.newValue else { return }
+            self?.selectFavorites(favorites: favorites)
         })
     }
     
@@ -101,7 +97,6 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
     
     func didSearch(query: String) {
         items.value = query.isEmpty ? items.value : items.value.filter {(item: CountriesListItemViewModel) -> Bool in
-            // If dataItem matches the searchText, return true to include it
             return item.name.range(of: query, options: .caseInsensitive) != nil
         }
     }

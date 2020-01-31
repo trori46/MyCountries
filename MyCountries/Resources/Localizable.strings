@@ -8,3 +8,11 @@
 
 "Countries" = "Countries";
 "Search results" = "Search results";
+"The name of country: " = "The name of country: ";
+"The capital: " = "The capital: ";
+"Region: " = "Region: ";
+"Subregion: " = "Subregion: ";
+"Population: " = "Population: ";
+"Area: " = "Area: ";
+"Currsencies: " = "Currencies: ";
+"Favorites" = "Favorites";

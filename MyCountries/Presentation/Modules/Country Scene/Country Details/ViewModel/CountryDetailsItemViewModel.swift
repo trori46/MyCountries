@@ -31,12 +31,12 @@ final class DefaultCountryDetailsItemViewModel: CountryDetailsItemViewModel {
     let currencies: String
     
     init(_ country: Country.Details) {
-        self.name = country.name
-        self.capital = country.capital
-        self.region = country.region
-        self.subregion = country.subregion
-        self.population = "\(country.population)"
-        self.area = "\(country.area)"
-        self.currencies = country.currencies.joined(separator: ", ")
+        self.name = NSLocalizedString("The name of country: ", comment: "") + "\(country.name)"
+        self.capital = NSLocalizedString("The capital: ", comment: "") + "\(country.capital)"
+        self.region = NSLocalizedString("Region: ", comment: "") + "\(country.region)"
+        self.subregion = NSLocalizedString("Subregion: ", comment: "") + "\(country.subregion)"
+        self.population = NSLocalizedString("Population: ", comment: "") + "\(country.population)"
+        self.area = NSLocalizedString("Area: ", comment: "") + "\(country.area)"
+        self.currencies = NSLocalizedString("Currencies: ", comment: "") + country.currencies.joined(separator: ", ")
     }
 }

@@ -48,6 +48,7 @@ extension DependencyContainer {
             controller.viewControllers = controllers.map {
                 let controller = UINavigationController(rootViewController: $0)
                 controller.tabBarItem.title = $0.tabBarItem.title
+                controller.tabBarItem.image = UIImage(named: "\($0.tabBarItem.title)")
                 return controller
             }
             
