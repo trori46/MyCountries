@@ -72,18 +72,21 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7xg-Gv-W5a">
-                                                            <rect key="frame" x="348" y="61" width="46" height="46"/>
+                                                            <rect key="frame" x="354" y="74" width="40" height="40"/>
                                                             <constraints>
+                                                                <constraint firstAttribute="height" constant="40" id="W2S-Jx-7If"/>
                                                                 <constraint firstAttribute="width" secondItem="7xg-Gv-W5a" secondAttribute="height" id="d7K-5r-JtI"/>
                                                             </constraints>
-                                                            <state key="normal" title="Button"/>
+                                                            <connections>
+                                                                <action selector="favorite:" destination="2hp-UJ-BGP" eventType="touchUpInside" id="nDV-gJ-bWw"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="UFR-F1-pA4" firstAttribute="leading" secondItem="nEF-GN-Ash" secondAttribute="leading" constant="16" id="9lV-Cg-ZWa"/>
                                                         <constraint firstItem="7xg-Gv-W5a" firstAttribute="trailing" secondItem="nEF-GN-Ash" secondAttribute="trailingMargin" id="AMC-N5-IDc"/>
                                                         <constraint firstItem="UFR-F1-pA4" firstAttribute="top" secondItem="nEF-GN-Ash" secondAttribute="top" constant="11" id="BYb-Ch-yx9"/>
-                                                        <constraint firstAttribute="bottomMargin" secondItem="7xg-Gv-W5a" secondAttribute="bottom" constant="12" id="H3l-Zt-e51"/>
+                                                        <constraint firstAttribute="bottom" secondItem="7xg-Gv-W5a" secondAttribute="bottom" constant="16" id="H3l-Zt-e51"/>
                                                         <constraint firstItem="HW4-Jd-4Vw" firstAttribute="top" secondItem="lfW-Tu-klN" secondAttribute="bottom" constant="6" id="PjI-xK-uUU"/>
                                                         <constraint firstItem="HW4-Jd-4Vw" firstAttribute="leading" secondItem="UFR-F1-pA4" secondAttribute="leading" id="bzV-YI-Gec"/>
                                                         <constraint firstItem="lfW-Tu-klN" firstAttribute="top" secondItem="UFR-F1-pA4" secondAttribute="bottom" constant="3.5" id="jHS-RD-c1L"/>

@@ -49,6 +49,8 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
     var isEmpty: Bool { return items.value.isEmpty }
     let error: Observable<String> = Observable("")
     
+    var observer: NSKeyValueObservation?
+    
     private let countriesUseCase: CountriesUseCase
     
     init(countriesUseCase: CountriesUseCase) {
@@ -56,26 +58,36 @@ final class DefaultCountriesListViewModel: CountriesListViewModel {
     }
     
     func viewDidLoad() {
-       updateDate()
+        updateDate()
     }
     
     func updateDate() {
         loadingType.value = .fullScreen
-               _ = countriesUseCase.countries()
-                   .observeOn(MainScheduler.instance)
-                   .map { $0.map(DefaultCountriesListItemViewModel.init) }
-                   .do(onSuccess: { [weak self] (a) in
-                       print(a)
-                       self?.items.value = a
-                       self?.loadingType.value = .none
-                       
-                       }, onError: { [weak self] in
-                           self?.loadingType.value = .none
-                           self?.error.value = $0.localizedDescription
-                   })
-                   .subscribe()
+        _ = countriesUseCase.countries()
+            .observeOn(MainScheduler.instance)
+            .map { $0.map(DefaultCountriesListItemViewModel.init) }
+            .do(onSuccess: { [weak self] (a) in
+                print(a)
+                self?.items.value = a
+                self?.loadingType.value = .none
+                
+                }, onError: { [weak self] in
+                    self?.loadingType.value = .none
+                    self?.error.value = $0.localizedDescription
+            })
+            .subscribe()
+        
+        observer = UserDefaults.standard.observe(\.favorites!, options: [.initial, .new], changeHandler: { [weak self] (defaults, change) in
+            guard let array = self?.items.value else { return }
+            array.forEach { $0.deselectFavorite() }
+            
+            change.newValue?.forEach { (name) in
+                
+                array.first(where: { $0.name == name })?.selectFavorite()
+                self?.items.value = array
+            }
+        })
     }
-    
     func didSearch(query: String) {
         
     }
