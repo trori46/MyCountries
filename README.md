@@ -1,3 +1,3 @@
 # MyCountries
 
-a litle challenge with Clean Architecture + MVVM on IOS
+a little challenge with Clean Architecture + MVVM on IOS 🔥
